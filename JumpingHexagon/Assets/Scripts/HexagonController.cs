@@ -12,7 +12,22 @@ public class HexagonController : MonoBehaviour {
 	public GameObject fireworkOneTime;
 	public GameObject smallFireworkOneTime;
 
+	void Start()
+	{
+		connectPrefab();
+	}
+
 	//////////////////////////////////////////
+
+	private void connectPrefab()
+	{
+		aval1Prefab = (GameObject) Resources.Load("Prefab/avalLevel1");
+		aval2Prefab = (GameObject) Resources.Load("Prefab/avalLevel2");
+		hexagonVioletPrefab = (GameObject) Resources.Load("Prefab/HexagonViolet");
+		hexagonBlackPrefab = (GameObject) Resources.Load("Prefab/HexagonBlack");
+		fireworkOneTime = (GameObject) Resources.Load("Prefab/FireworkOneTime");
+		smallFireworkOneTime = (GameObject) Resources.Load("Prefab/SmallFireworkOneTime");
+	}
 
 	// lay ve doi tuong hexagon ma container dang co
 	public GameObject getHexagon()

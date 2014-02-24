@@ -5,6 +5,10 @@ public class Player : MonoBehaviour {
 
 	//Player1: Violet;
 	//Player2: Black;
+	//playerID
+	// = 0 : Draw
+	// = -1: violet win
+	// = -2: black win
 	public int playerID;
 
 	// Use this for initialization

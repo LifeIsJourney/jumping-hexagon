@@ -6,7 +6,7 @@ public class HexagonContainerGenerator : MonoBehaviour {
 
 	//Do dai canh cua Hexagon
 	public int size;
-	public GameObject containerPrefab;
+	GameObject containerPrefab;
 	public GameObject hexagonVioletPrefab;
 	public GameObject hexagonBlackPrefab;
 	public float updatePointPeriod = 0.2f;
@@ -18,7 +18,7 @@ public class HexagonContainerGenerator : MonoBehaviour {
 	public GameObject blackWinPrefab;
 	public GameObject drawPrefab;
 	
-	private static bool isGenerated = false;
+	private static bool isGenerated;
 	private int maxColumnLength;
 	private float nextActionTime = 0f;
 
@@ -35,6 +35,8 @@ public class HexagonContainerGenerator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		isGenerated = false;
+		connectPrefab();
 		generatorHexagonContainers();
 		initSomeHexagon();
 	}
@@ -45,6 +47,16 @@ public class HexagonContainerGenerator : MonoBehaviour {
 			nextActionTime += updatePointPeriod;
 			updateGamePoint();
 		}
+	}
+
+	private void connectPrefab()
+	{
+		containerPrefab = (GameObject) Resources.Load("Prefab/HexagonContainer");
+		hexagonVioletPrefab = (GameObject) Resources.Load("Prefab/HexagonViolet");
+		hexagonBlackPrefab = (GameObject) Resources.Load("Prefab/HexagonBlack");
+		violetWinPrefab = (GameObject) Resources.Load("Prefab/VioletWin");
+		blackWinPrefab = (GameObject) Resources.Load("Prefab/BlackWin");
+		drawPrefab = (GameObject) Resources.Load("Prefab/Draw");
 	}
 
 	private void generatorHexagonContainers()
@@ -136,12 +148,12 @@ public class HexagonContainerGenerator : MonoBehaviour {
 		//Check win
 		int winPlayerID = isGameOver();
 
-		if (playerID == 0)
+		if (playerID <= 0)
 			return;
 
 		if (winPlayerID == 1)
 		{
-			gameObject.GetComponent<Player>().playerID = 0;
+			gameObject.GetComponent<Player>().playerID = -1;
 			//violet win
 			GameObject.Find("turnBlack").GetComponent<Animator>().SetBool("isOff",true);
 			Instantiate(violetWinPrefab, violetWinPrefab.transform.position, violetWinPrefab.transform.rotation);
@@ -149,14 +161,13 @@ public class HexagonContainerGenerator : MonoBehaviour {
 		}
 		if (winPlayerID == 2)
 		{
-			gameObject.GetComponent<Player>().playerID = 0;
+			gameObject.GetComponent<Player>().playerID = -2;
 			//black win
 			GameObject.Find("turnViolet").GetComponent<Animator>().SetBool("isOff",true);
 			Instantiate(blackWinPrefab, blackWinPrefab.transform.position, blackWinPrefab.transform.rotation);
 			return;
 		}
 		
-		//Hoa CHUA LAM
 		if (winPlayerID == 3)
 		{
 			gameObject.GetComponent<Player>().playerID = 0;
@@ -184,6 +195,8 @@ public class HexagonContainerGenerator : MonoBehaviour {
 			for (int row = 0; row < maxColumnLength - Mathf.Abs(col); row++)
 			{
 				GameObject ctn = GameObject.Find("ctn["+col+","+row+"]");
+				if (ctn == null)
+					return 0;
 				HexagonController controller = ctn.GetComponent<HexagonController>();
 				GameObject hexagon = controller.getHexagon();
 				
