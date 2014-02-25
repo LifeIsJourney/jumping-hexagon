@@ -12,9 +12,22 @@ public class HexagonController : MonoBehaviour {
 	public GameObject fireworkOneTime;
 	public GameObject smallFireworkOneTime;
 
+	public bool isShowedGuide;
+
 	void Start()
 	{
 		connectPrefab();
+		isShowedGuide = false;
+	}
+
+	void OnGUI()
+	{
+		// ! for test
+		if (!isShowedGuide)
+		{
+			Texture2D Image1 = (Texture2D) Resources.Load("Images/Tut1_final");
+			GUI.DrawTexture (new Rect(0, 0, Image1.width, Image1.height), Image1);
+		}
 	}
 
 	//////////////////////////////////////////

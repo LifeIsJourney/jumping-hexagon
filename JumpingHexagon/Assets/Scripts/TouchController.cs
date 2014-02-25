@@ -45,7 +45,7 @@ public class TouchController : MonoBehaviour {
 					if (isInLine(touchPos.x,backMenuTopLeftVioletWin.x,backMenuBotRightVioletWin.x) &&
 					    isInLine(touchPos.y,backMenuTopLeftVioletWin.y,backMenuBotRightVioletWin.y))
 					{
-
+						Application.LoadLevel("MenuScene");
 						return;
 					}
 					//restart
@@ -62,7 +62,7 @@ public class TouchController : MonoBehaviour {
 					if (isInLine(touchPos.x,backMenuTopLeftBlackWin.x,backMenuBotRightBlackWin.x) &&
 					    isInLine(touchPos.y,backMenuTopLeftBlackWin.y,backMenuBotRightBlackWin.y))
 					{
-						
+						Application.LoadLevel("MenuScene");
 						return;
 					}
 					//restart
