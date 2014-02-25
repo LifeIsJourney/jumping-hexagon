@@ -23,11 +23,11 @@ public class HexagonController : MonoBehaviour {
 	void OnGUI()
 	{
 		// ! for test
-		if (!isShowedGuide)
-		{
-			Texture2D Image1 = (Texture2D) Resources.Load("Images/Tut1_final");
-			GUI.DrawTexture (new Rect(0, 0, Image1.width, Image1.height), Image1);
-		}
+//		if (!isShowedGuide)
+//		{
+//			Texture2D Image1 = (Texture2D) Resources.Load("Images/Tut1_final");
+//			GUI.DrawTexture (new Rect(0, 0, Image1.width, Image1.height), Image1);
+//		}
 	}
 
 	//////////////////////////////////////////
