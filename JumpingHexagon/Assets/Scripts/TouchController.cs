@@ -19,13 +19,54 @@ public class TouchController : MonoBehaviour {
 	public Vector2 restartTopLeftBlackWin = new Vector2(-4.64f,3.43f);
 	public Vector2 restartBotRightBlackWin = new Vector2(-1.24f,2.35f);
 
+	//co 2 tuto, = 1: dang load tuto1 =2: dang load tuto2
+	private int isloadedTutorial;
+	private GameObject tuto1;
+	private GameObject tuto2;
+
 	private int size;
 	//Do dai cua Column dai nhat (column 0)
 	private int maxColumnLength;
 
+	private bool isTouchedDown;
+
+	void Start()
+	{
+		isloadedTutorial = 0;
+		isTouchedDown = false;
+		tuto1 = (GameObject) Resources.Load("Prefab/Tuto1");
+		tuto2 = (GameObject) Resources.Load("Prefab/Tuto2");
+	}
+
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetMouseButtonUp(0))
+		{
+			isTouchedDown = false;
+			return;
+		}
 		if (Input.GetMouseButton(0))
+		{
+			if (isTouchedDown)
+				return;
+			else
+				isTouchedDown = true;
+		}
+		else
+			return;
+
+		if (isloadedTutorial == 1 && Input.GetMouseButton(0))
+		{
+			Destroy(GameObject.Find("Tuto1(Clone)"));
+			isloadedTutorial = 2;
+			Instantiate(tuto2);
+		} 
+		else if (isloadedTutorial == 2 && Input.GetMouseButton(0))
+		{
+			Destroy(GameObject.Find("Tuto2(Clone)"));
+			isloadedTutorial = 0;
+		} 
+		else if (isloadedTutorial == 0 && Input.GetMouseButton(0))
 		{
 			if (GameObject.Find("Hexagon Background").GetComponent<Player>().playerID > 0)
 			{
@@ -33,6 +74,22 @@ public class TouchController : MonoBehaviour {
 				if (nearestCnt != null)
 				{
 					nearestCnt.GetComponent<HexagonController>().onTouched();
+				}
+
+				//kiem tra co an vao tutorial hay ko
+				Vector2 touchPos = getPointToWorld(Input.mousePosition);
+				float minDistance = float.MaxValue;
+				//Neu xa qua thi cung coi nhu khong click vao Gameobject nao.
+				float XA_QUA_ROI_EM_OI = 0.5f;
+				GameObject tutorialButton = GameObject.Find("menu1");
+				Vector2 buttonPos = new Vector2(tutorialButton.transform.position.x, tutorialButton.transform.position.y);
+				float khoangCachButtonvoiDiemTouch = Vector2.Distance(buttonPos, touchPos);
+				if (khoangCachButtonvoiDiemTouch < XA_QUA_ROI_EM_OI)
+				{
+					//guide
+					//load tuto = 0;
+					isloadedTutorial = 1;
+					Instantiate(tuto1);
 				}
 			}
 			else

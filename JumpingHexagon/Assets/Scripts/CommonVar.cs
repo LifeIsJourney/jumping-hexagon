@@ -5,7 +5,7 @@ public class CommonVar : MonoBehaviour {
 
 	private static bool activeTouch = true;
 	//public
-	public float disableTouchTime = 0.3f; //moi lan touch cach nhau 0.3s
+	public float disableTouchTime = 0.1f; //moi lan touch cach nhau 0.3s
 	public bool isMusicOn = true;
 
 	void Start()
