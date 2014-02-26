@@ -30,12 +30,23 @@ public class TouchController : MonoBehaviour {
 
 	private bool isTouchedDown;
 
+	private int isRunTutorialInNhatMotLan;
+
 	void Start()
 	{
 		isloadedTutorial = 0;
 		isTouchedDown = false;
 		tuto1 = (GameObject) Resources.Load("Prefab/Tuto1");
 		tuto2 = (GameObject) Resources.Load("Prefab/Tuto2");
+
+		//Play Tutolan dau tien
+		isRunTutorialInNhatMotLan = PlayerPrefs.GetInt("isRunTutorialInNhatMotLan");
+		if (isRunTutorialInNhatMotLan == 0)
+		{
+			PlayerPrefs.SetInt("isRunTutorialInNhatMotLan",1);
+			isloadedTutorial = 1;
+			Instantiate(tuto1);
+		}
 	}
 
 	// Update is called once per frame
