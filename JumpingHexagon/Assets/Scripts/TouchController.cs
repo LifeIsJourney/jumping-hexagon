@@ -78,7 +78,6 @@ public class TouchController : MonoBehaviour {
 
 				//kiem tra co an vao tutorial hay ko
 				Vector2 touchPos = getPointToWorld(Input.mousePosition);
-				float minDistance = float.MaxValue;
 				//Neu xa qua thi cung coi nhu khong click vao Gameobject nao.
 				float XA_QUA_ROI_EM_OI = 0.5f;
 				GameObject tutorialButton = GameObject.Find("menu1");
@@ -90,6 +89,14 @@ public class TouchController : MonoBehaviour {
 					//load tuto = 0;
 					isloadedTutorial = 1;
 					Instantiate(tuto1);
+				}
+
+				GameObject quitButton = GameObject.Find("menu6");
+				Vector2 quitButtonPos = new Vector2(quitButton.transform.position.x,quitButton.transform.position.y);
+				float khoangCachButtonQuitVoiTouchPos = Vector2.Distance(quitButtonPos, touchPos);
+				if (khoangCachButtonQuitVoiTouchPos < XA_QUA_ROI_EM_OI)
+				{
+					Application.LoadLevel("MenuScene");
 				}
 			}
 			else
