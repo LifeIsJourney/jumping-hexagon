@@ -23,6 +23,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+<!--            start: THEM DONG NAY DE CLICK DUOC QUANG CAO-->
+            <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
+<!--            end: THEM DONG NAY DE CLICK DUOC QUANG CAO-->
         </activity>
         <activity android:name="com.unity3d.player.UnityPlayerActivity"
                   android:label="@string/app_name"
