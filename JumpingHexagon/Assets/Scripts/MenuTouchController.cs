@@ -75,6 +75,8 @@ public class MenuTouchController : MonoBehaviour {
 					case 2:
 					{
 						//single
+						PlayerPrefs.SetInt("gameType",1);
+						Application.LoadLevel ("LocalPlayerVsPlayerScene");
 						break;
 					}
 					case 3:
@@ -101,6 +103,7 @@ public class MenuTouchController : MonoBehaviour {
 					case 4:
 					{
 						//multi
+						PlayerPrefs.SetInt("gameType",2);
 						Application.LoadLevel ("LocalPlayerVsPlayerScene"); 
 						break;
 					}

@@ -12,22 +12,9 @@ public class HexagonController : MonoBehaviour {
 	public GameObject fireworkOneTime;
 	public GameObject smallFireworkOneTime;
 
-	public bool isShowedGuide;
-
 	void Start()
 	{
 		connectPrefab();
-		isShowedGuide = false;
-	}
-
-	void OnGUI()
-	{
-		// ! for test
-//		if (!isShowedGuide)
-//		{
-//			Texture2D Image1 = (Texture2D) Resources.Load("Images/Tut1_final");
-//			GUI.DrawTexture (new Rect(0, 0, Image1.width, Image1.height), Image1);
-//		}
 	}
 
 	//////////////////////////////////////////
@@ -78,7 +65,12 @@ public class HexagonController : MonoBehaviour {
 	// Duoc goi khi Hexagon Container bi click
 	public void onTouched()
 	{
-		if (GameObject.Find("Hexagon Background").GetComponent<CommonVar>().isEnablingTouch() == false)
+		//Neu dang trong phan choi don va AI dang nghi
+		if (GameObject.Find("Hexagon Background").GetComponent<CommonVar>().gameType == 1 && 
+		    GameObject.Find("Hexagon Background").GetComponent<Player>().playerID == 2)
+			return;
+
+	    if (GameObject.Find("Hexagon Background").GetComponent<CommonVar>().isEnablingTouch() == false)
 			return;
 
 		//Neu click vao chinh minh thi return
@@ -199,7 +191,16 @@ public class HexagonController : MonoBehaviour {
 
 					//Change player
 					GameObject.Find("Hexagon Background").GetComponent<Player>().changePlayer();
-					return;
+
+					//Neu la single
+					if (GameObject.Find("Hexagon Background").GetComponent<CommonVar>().gameType == 1 && 
+					    GameObject.Find("Hexagon Background").GetComponent<Player>().playerID == 2)
+					{
+						StartCoroutine(delayJumpHexagon());
+						return;
+					}
+					else
+						return;
 				}
 			}
 
@@ -264,13 +265,103 @@ public class HexagonController : MonoBehaviour {
 
 					//Change player
 					GameObject.Find("Hexagon Background").GetComponent<Player>().changePlayer();
-					return;
+
+					//Neu la single
+					if (GameObject.Find("Hexagon Background").GetComponent<CommonVar>().gameType == 1 && 
+					    GameObject.Find("Hexagon Background").GetComponent<Player>().playerID == 2)
+					{
+						StartCoroutine(delayJumpHexagon());
+						return;
+					}
+					else
+						return;
 				}
 			}
 
 			//play false sound
 			gameObject.GetComponents<AudioSource>()[1].Play();
 		}
+	}
+
+	private IEnumerator delayJumpHexagon()
+	{
+		//wait 1s
+		yield return new WaitForSeconds(1);
+		List<GameObject> route = GameObject.Find("Hexagon Background").GetComponent<AIController>().getNextMoveOfBlack();
+		JumpHexagon(route[0], route[1], route[2]);
+	}
+
+	// phuc vu AI
+	private void JumpHexagon(GameObject startContainer, GameObject endContainer, GameObject points)
+	{
+		if (startContainer == null || endContainer == null)
+			return;
+
+		//Sinh hexagon moi giong voi kieu hexagon dang co
+		GameObject newHexagon = null;
+		if (startContainer.GetComponent<HexagonController>().getHexagon().name.Contains("HexagonBlack"))
+			newHexagon = (GameObject) (Instantiate(hexagonBlackPrefab));
+		else if (startContainer.GetComponent<HexagonController>().getHexagon().name.Contains("HexagonViolet"))
+			newHexagon = (GameObject) (Instantiate(hexagonVioletPrefab));
+		endContainer.GetComponent<HexagonController>().addHexagon(newHexagon);
+
+		//play small firework
+		Vector3 smallfireworkPos = new Vector3(endContainer.transform.position.x,endContainer.transform.position.y,smallFireworkOneTime.transform.position.z);
+		Instantiate(smallFireworkOneTime, smallfireworkPos, smallFireworkOneTime.transform.rotation);
+
+		//Sound
+		if (int.Parse(points.name) % 2 != 0)
+		{
+			//sound spawn
+			endContainer.GetComponents<AudioSource>()[2].Play();
+		}
+		else
+		{
+			//sound jump
+			endContainer.GetComponents<AudioSource>()[3].Play();
+			//Xoa Hexagon o previous
+			startContainer.GetComponent<HexagonController>().removeHexagon();
+		}
+
+		//Bien hexagon chung quanh thanh ban cua no
+		foreach(GameObject hangxom1 in getHangXom(endContainer))
+		{
+			if (endContainer == hangxom1)
+				continue;
+			
+			GameObject oldHexagonHangXom1 = hangxom1.GetComponent<HexagonController>().getHexagon();
+			if (oldHexagonHangXom1 != null)
+			{
+				hangxom1.GetComponent<HexagonController>().removeHexagon();
+				GameObject newHangXomHexagon = null;
+				if (startContainer.GetComponent<HexagonController>().getHexagon().name.Contains("HexagonBlack"))
+				{
+					newHangXomHexagon = (GameObject) (Instantiate(hexagonBlackPrefab));
+					if (oldHexagonHangXom1.name.Contains("HexagonViolet"))
+					{
+						//play firework
+						Vector3 fireworkPos = new Vector3(hangxom1.transform.position.x,hangxom1.transform.position.y,fireworkOneTime.transform.position.z);
+						Instantiate(fireworkOneTime, fireworkPos, fireworkOneTime.transform.rotation);
+					}
+				}
+				else if (startContainer.GetComponent<HexagonController>().getHexagon().name.Contains("HexagonViolet"))
+				{
+					newHangXomHexagon = (GameObject) (Instantiate(hexagonVioletPrefab));
+					if (oldHexagonHangXom1.name.Contains("HexagonBlack"))
+					{
+						//play firework
+						Vector3 fireworkPos = new Vector3(hangxom1.transform.position.x,hangxom1.transform.position.y,fireworkOneTime.transform.position.z);
+						Instantiate(fireworkOneTime, fireworkPos, fireworkOneTime.transform.rotation);
+					}
+				}
+				hangxom1.GetComponent<HexagonController>().addHexagon(newHangXomHexagon);
+			}
+		}
+
+		Destroy(points);
+
+		//Change player
+		GameObject.Find("Hexagon Background").GetComponent<Player>().changePlayer();
 	}
 
 	// Remove hexagon

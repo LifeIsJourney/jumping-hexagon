@@ -19,6 +19,21 @@ public class Player : MonoBehaviour {
 	}
 
 	// Xet xem hexagon truyen vao cua ai
+	public int whoseContainer(GameObject container)
+	{
+		if (container == null)
+			return -1;
+		GameObject hexagon = container.GetComponent<HexagonController>().getHexagon();
+		if (hexagon == null)
+			return 0;
+		if (hexagon.name.Contains("HexagonViolet"))
+			return 1;
+		if (hexagon.name.Contains("HexagonBlack"))
+			return 2;
+		return 0;
+	}
+
+	// Xet xem hexagon truyen vao cua ai
 	public int whoseHexagon(GameObject hexagon)
 	{
 		if (hexagon == null)

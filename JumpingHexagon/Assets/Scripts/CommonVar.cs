@@ -7,6 +7,7 @@ public class CommonVar : MonoBehaviour {
 	//public
 	public float disableTouchTime = 0.1f; //moi lan touch cach nhau 0.3s
 	public bool isMusicOn = true;
+	public int gameType;
 
 	void Start()
 	{
@@ -22,6 +23,8 @@ public class CommonVar : MonoBehaviour {
 			isMusicOn = false;
 			AudioListener.volume = 0;
 		}
+
+		gameType = PlayerPrefs.GetInt("gameType");
 	}
 
 	private IEnumerator enableTouchAfterSeconds(float second)
